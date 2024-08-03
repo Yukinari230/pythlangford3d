@@ -1,0 +1,66 @@
+<html>
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="ここにページの概要が入ります。">
+
+        <title>PyScriptテスト</title>
+        <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <py-env>
+            - matplotlib
+            - numpy
+        </py-env>
+</head>
+
+<body>
+
+<py-script>
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def lorenz(x, y, z, s=10, r=28, b=2.667):
+
+    x_dot = (z-0.7)*x-3.5*y
+    y_dot = 3.5*x-(z-0.7)*y
+    z_dot = 0.6+z-1/3*z**3-(x**2+y**2)*(1+0.25*z)
+
+    return x_dot, y_dot, z_dot
+
+
+dt = 0.05
+num_steps = 30000
+
+# Need one more for the initial values
+xs = np.empty(num_steps + 1)
+ys = np.empty(num_steps + 1)
+zs = np.empty(num_steps + 1)
+tt = np.empty(num_steps+1)
+
+# Set initial values
+xs[0], ys[0], zs[0] = (1.,1.,0)
+tt[0]=0
+
+for i in range(num_steps):
+    x_dot, y_dot, z_dot = lorenz(xs[i], ys[i], zs[i])
+    xs[i + 1] = xs[i] + (x_dot * dt)
+    ys[i + 1] = ys[i] + (y_dot * dt)
+    zs[i + 1] = zs[i] + (z_dot * dt)
+    tt[i+1]   =dt*i
+   
+fig,ax=plt.subplots()
+ax = plt.axes(projection='3d')
+
+ax.plot3D(xs, ys, zs, 'gray')
+
+fig
+
+
+
+</py-script>
+
+</body>
+</html>
